@@ -10,16 +10,39 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/de03f8749b.js"
+      crossorigin="anonymous"
+    ></script>
     <title>Weather Dashboard</title>
   </head>
   <body>
     <header class="jumbotron jumbotron-fluid">
       <div class="container">
-        <h1 class="display-4 text-center">Weather Dashboard</h1>
+        <h1 class="display-4 text-center weather-title">Weather Dashboard</h1>
       </div>
     </header>
     <main class="row">
-      <section class="col-4" id="city-search"></section>
+      <section class="col-4">
+        <div class="card border-info" id="city-search" style="width: 18rem;">
+          <div class="card-header">
+            <h3>Search for a city:</h3>
+            <div class="form-group search">
+              <input type="text" class="form-control" id="search-city" />
+              <button class="btn-info fas fa-search"></button>
+            </div>
+          </div>
+        </div>
+      </section>
       <section class="col-8" id="current-city">
         <div class="row" id="forecast-today"></div>
         <div class="row" id="forecast-future"></div>
