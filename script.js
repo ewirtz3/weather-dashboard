@@ -3,7 +3,7 @@ var searchBtn = $("#search");
 var cities = [];
 
 //on document load, render past cities searched
-$(document).ready(renderCity(localStorage.getItem("cities")));
+$(document).ready(renderCity());
 
 //user searches for a city, upon click of spyglass use AJAX to query that city from weather API, city saves in localStorage, findWeather function runs
 $(searchBtn).on("click", function (event) {
@@ -58,11 +58,32 @@ function findWeather(cityInput) {
       url: queryUrl2,
       method: "GET",
     }).then(function (response) {
-      console.log(moment().format("M/D/YYYY"));
-      console.log(response.current.temp);
-      console.log(response.current.humidity);
-      console.log(response.current.wind_speed);
-      console.log(response.current.uvi);
+      var currentDate = $("<div>" + moment().format("M/D/YYYY") + "<div>");
+      var currentTemp = $(
+        "<div>" + "Temperature: " + response.current.temp + "<div>"
+      );
+      var currentHumidity = $(
+        "<div>" + "Humidity: " + response.current.humidity + "<div>"
+      );
+      var currentWind = $(
+        "<div>" + "Wind Speed: " + response.current.wind_speed + "<div>"
+      );
+      var currentUvi = $(
+        "<div>" + "UV Index: " + response.current.uvi + "<div>"
+      );
+      var currentIcon = response.current.weather[0].icon;
+      var weatherIcon = $("<img>").attr(
+        "src",
+        "http://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
+      );
+      $("#forecast-today").removeClass("d-none");
+      $(currentDate).addClass("card-title").appendTo("#current-weather-card");
+      $(currentTemp).addClass("card-text").appendTo("#current-weather-card");
+      $(currentHumidity)
+        .addClass("card-text")
+        .appendTo("#current-weather-card");
+      $(currentWind).addClass("card-text").appendTo("#current-weather-card");
+      $(currentUvi).addClass("card-text").appendTo("#current-weather-card");
     });
   });
 }
