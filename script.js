@@ -1,19 +1,35 @@
-//global variables for city input field, search button, and cities array for localStorage
+//global variables for search button and cities array for localStorage
 var searchBtn = $("#search");
 var cities = [];
 
-//user searches for a city, upon click of spyglass use AJAX to query that city from weather API, city saves in localStorage
+//user searches for a city, upon click of spyglass use AJAX to query that city from weather API, city saves in localStorage, findWeather function runs
 $(searchBtn).on("click", function (event) {
   event.preventDefault();
-  console.log(event);
   var cityInput = $("#search-city").val();
   console.log(cityInput);
-  localStorage.setItem("cities", cityInput);
+  if (cityInput === "") {
+    return;
+  }
+  cities.push(cityInput);
+  storeCity(cityInput);
   findWeather(cityInput);
 });
+
+//function to set cityInput to localStorage, adding it to the cities array
+function storeCity(cityInput) {
+  localStorage.setItem("cities", JSON.stringify(cities));
+};
+
+//function to render past cities searched
+function renderCity(cityInput {
+
+}
+
 //today's forecast populates to the forecast-today div (card), 5-day forecast populates to the forecast-future(cards)
+//defining global variable apiKey
 var apiKey = "f89051132db4ab1cb9f39239dc668ba0";
 
+//function to get weather info
 function findWeather(cityInput) {
   var queryUrl =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -31,7 +47,15 @@ function findWeather(cityInput) {
       response.coord.lon +
       "&appid=" +
       apiKey;
-    console.log(queryUrl2);
+    $.ajax({
+      url: queryUrl2,
+      method: "GET",
+    }).then(function (response) {
+      console.log(response.current.temp);
+      console.log(response.current.humidity);
+      console.log(response.current.wind_speed);
+      console.log(response.current.uvi);
+    });
   });
 }
 
