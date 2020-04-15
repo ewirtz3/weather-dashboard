@@ -36,9 +36,11 @@
         <div class="card border-info" id="city-search" style="width: 18rem;">
           <div class="card-header">
             <h3>Search for a city:</h3>
-            <div class="form-group search">
+            <div class="input-group">
               <input type="text" class="form-control" id="search-city" />
-              <button class="btn-info fas fa-search" id="search"></button>
+              <div class="input-group-append">
+                <button class="btn-info fas fa-search" id="search"></button>
+              </div>
             </div>
           </div>
           <ul class="list-group list-group-flush" id="past-cities"></ul>
@@ -51,6 +53,7 @@
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./script.js" type="text/javascript"></script>
   </body>
 </html>

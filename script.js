@@ -2,6 +2,9 @@
 var searchBtn = $("#search");
 var cities = [];
 
+//on document load, render past cities searched
+$(document).ready(renderCity(localStorage.getItem("cities")));
+
 //user searches for a city, upon click of spyglass use AJAX to query that city from weather API, city saves in localStorage, findWeather function runs
 $(searchBtn).on("click", function (event) {
   event.preventDefault();
@@ -18,11 +21,15 @@ $(searchBtn).on("click", function (event) {
 //function to set cityInput to localStorage, adding it to the cities array
 function storeCity(cityInput) {
   localStorage.setItem("cities", JSON.stringify(cities));
-};
+}
 
 //function to render past cities searched
-function renderCity(cityInput {
-
+function renderCity() {
+  var cityDiv = $("#past-cities");
+  $.each(JSON.parse(localStorage.getItem("cities")), function (i, city) {
+    var newCity = $("<li>" + city + "</li>");
+    newCity.addClass("list-group-item").appendTo(cityDiv);
+  });
 }
 
 //today's forecast populates to the forecast-today div (card), 5-day forecast populates to the forecast-future(cards)
@@ -51,6 +58,7 @@ function findWeather(cityInput) {
       url: queryUrl2,
       method: "GET",
     }).then(function (response) {
+      console.log(moment().format("M/D/YYYY"));
       console.log(response.current.temp);
       console.log(response.current.humidity);
       console.log(response.current.wind_speed);
