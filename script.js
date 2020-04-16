@@ -53,20 +53,17 @@ function findWeather(cityInput) {
       "&lon=" +
       response.coord.lon +
       "&appid=" +
-      apiKey;
+      apiKey +
+      "&units=imperial";
     $.ajax({
       url: queryUrl2,
       method: "GET",
     }).then(function (response) {
       var currentDate = $(
-        "<div>" + cityInput + " (" + moment().format("M/D/YYYY") + ")" + "<div>"
+        "<h2>" + cityInput + " (" + moment().format("M/D/YYYY") + ")" + "<h2>"
       );
       var currentTemp = $(
-        "<div>" +
-          "Temperature: " +
-          ((response.current.temp - 273.15) * 1.8 + 32).toFixed(2) +
-          " &deg;F" +
-          "<div>"
+        "<div>" + "Temperature: " + response.current.temp + " &deg;F" + "<div>"
       );
       var currentHumidity = $(
         "<div>" + "Humidity: " + response.current.humidity + "%" + "<div>"
@@ -79,8 +76,22 @@ function findWeather(cityInput) {
           "<div>"
       );
       var currentUvi = $(
-        "<div>" + "UV Index: " + response.current.uvi + "<div>"
+        "<div>" +
+          "UV Index: " +
+          "<span>" +
+          response.current.uvi +
+          "</span>" +
+          "<div>"
       );
+      if (response.current.uvi < 4) {
+        $("span").addClass("badge badge-success");
+      }
+      if (response.current.uvi >= 4 && response.current.uvi < 7) {
+        $("span").addClass("badge badge-warning");
+      }
+      if (response.current.uvi >= 7 && response.current.uvi <= 9) {
+        $("span").addClass("badge badge-danger");
+      }
       var currentIcon = response.current.weather[0].icon;
       var weatherIcon = $("<img>").attr(
         "src",
@@ -88,6 +99,7 @@ function findWeather(cityInput) {
       );
       $("#forecast-today").removeClass("d-none");
       $(currentDate).addClass("card-title").appendTo("#current-weather-card");
+      $(weatherIcon).appendTo("#current-weather-card");
       $(currentTemp).addClass("card-text").appendTo("#current-weather-card");
       $(currentHumidity)
         .addClass("card-text")
