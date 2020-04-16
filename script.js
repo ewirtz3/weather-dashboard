@@ -58,15 +58,25 @@ function findWeather(cityInput) {
       url: queryUrl2,
       method: "GET",
     }).then(function (response) {
-      var currentDate = $("<div>" + moment().format("M/D/YYYY") + "<div>");
+      var currentDate = $(
+        "<div>" + cityInput + " (" + moment().format("M/D/YYYY") + ")" + "<div>"
+      );
       var currentTemp = $(
-        "<div>" + "Temperature: " + response.current.temp + "<div>"
+        "<div>" +
+          "Temperature: " +
+          ((response.current.temp - 273.15) * 1.8 + 32).toFixed(2) +
+          " &deg;F" +
+          "<div>"
       );
       var currentHumidity = $(
-        "<div>" + "Humidity: " + response.current.humidity + "<div>"
+        "<div>" + "Humidity: " + response.current.humidity + "%" + "<div>"
       );
       var currentWind = $(
-        "<div>" + "Wind Speed: " + response.current.wind_speed + "<div>"
+        "<div>" +
+          "Wind Speed: " +
+          response.current.wind_speed +
+          " mph" +
+          "<div>"
       );
       var currentUvi = $(
         "<div>" + "UV Index: " + response.current.uvi + "<div>"
