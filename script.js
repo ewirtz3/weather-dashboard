@@ -81,7 +81,7 @@ function findWeather(cityInput) {
           "<span>" +
           response.current.uvi +
           "</span>" +
-          "<div>"
+          "</div>"
       );
       if (response.current.uvi < 4) {
         $("span").addClass("badge badge-success");
