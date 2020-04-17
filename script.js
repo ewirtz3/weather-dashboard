@@ -8,6 +8,8 @@ $(document).ready(renderCity());
 //user searches for a city, upon click of spyglass use AJAX to query that city from weather API, city saves in localStorage, findWeather function runs
 $(searchBtn).on("click", function (event) {
   event.preventDefault();
+  $("#current-weather-card").empty();
+  $("#forecast-future").empty();
   var cityInput = $("#search-city").val();
   console.log(cityInput);
   if (cityInput === "") {
