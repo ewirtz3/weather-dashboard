@@ -16,6 +16,7 @@ $(searchBtn).on("click", function (event) {
   cities.push(cityInput);
   storeCity(cityInput);
   findWeather(cityInput);
+  futureWeather(cityInput);
 });
 
 //function to set cityInput to localStorage, adding it to the cities array
@@ -36,7 +37,7 @@ function renderCity() {
 //defining global variable apiKey
 var apiKey = "f89051132db4ab1cb9f39239dc668ba0";
 
-//function to get weather info
+//function to get current weather info
 function findWeather(cityInput) {
   var queryUrl =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -63,17 +64,17 @@ function findWeather(cityInput) {
         "<h2>" + cityInput + " (" + moment().format("M/D/YYYY") + ")" + "<h2>"
       );
       var currentTemp = $(
-        "<div>" + "Temperature: " + response.current.temp + " &deg;F" + "<div>"
+        "<div>" + "Temperature: " + response.current.temp + " &deg;F" + "</div>"
       );
       var currentHumidity = $(
-        "<div>" + "Humidity: " + response.current.humidity + "%" + "<div>"
+        "<div>" + "Humidity: " + response.current.humidity + "%" + "</div>"
       );
       var currentWind = $(
         "<div>" +
           "Wind Speed: " +
           response.current.wind_speed +
           " mph" +
-          "<div>"
+          "</div>"
       );
       var currentUvi = $(
         "<div>" +
@@ -106,6 +107,55 @@ function findWeather(cityInput) {
         .appendTo("#current-weather-card");
       $(currentWind).addClass("card-text").appendTo("#current-weather-card");
       $(currentUvi).addClass("card-text").appendTo("#current-weather-card");
+    });
+  });
+}
+
+//function to get future weather info
+function futureWeather(cityInput) {
+  var queryUrl =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    cityInput +
+    "&appid=" +
+    apiKey;
+  $.ajax({
+    url: queryUrl,
+    method: "GET",
+  }).then(function (response) {
+    var queryUrl2 =
+      "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+      response.coord.lat +
+      "&lon=" +
+      response.coord.lon +
+      "&appid=" +
+      apiKey +
+      "&units=imperial";
+    $.ajax({
+      url: queryUrl2,
+      method: "GET",
+    }).then(function (response) {
+      console.log(moment(response.daily[0].dt));
+      var futureDate = $(
+        "<h5>" + moment().add(1, "d").format("M/D/YYYY") + "</h5>"
+      );
+      var futureTemp = $(
+        "<div>" + "Temp: " + response.daily[0].temp.max + " &deg;F" + "</div>"
+      );
+      var futureHumidity = $(
+        "<div>" + "Humidity: " + response.daily[0].humidity + "%" + "</div>"
+      );
+      var futureIcon = response.daily[0].weather[0].icon;
+      console.log(futureIcon);
+      var futureWeatherIcon = $("<img>").attr(
+        "src",
+        "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
+      );
+      var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
+      var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
+      $(futureDate).addClass("card-title").appendTo(newCardBody);
+      $(futureWeatherIcon).appendTo(newCardBody);
+      $(futureTemp).addClass("card-text").appendTo(newCardBody);
+      $(futureHumidity).addClass("card-text").appendTo(newCardBody);
     });
   });
 }
