@@ -6,12 +6,12 @@ var cities = [];
 $(document).ready(renderCity());
 
 //user searches for a city, upon click of spyglass use AJAX to query that city from weather API, city saves in localStorage, findWeather function runs
+//upon refresh, any cities in localStorage persist/append to unordered list (id: past-cities), need to create <li class="list-group-item"> for each
 $(searchBtn).on("click", function (event) {
   event.preventDefault();
   $("#current-weather-card").empty();
   $("#forecast-future").empty();
   var cityInput = $("#search-city").val();
-  console.log(cityInput);
   if (cityInput === "") {
     return;
   }
@@ -132,7 +132,6 @@ function futureWeather(cityInput) {
     url: queryUrl,
     method: "GET",
   }).then(function (response) {
-    console.log(response);
     var futureDate = $(
       "<h5>" + moment().add(1, "d").format("M/D/YYYY") + "</h5>"
     );
@@ -143,7 +142,6 @@ function futureWeather(cityInput) {
       "<div>" + "Humidity: " + response.list[0].main.humidity + "%" + "</div>"
     );
     var futureIcon = response.list[0].weather[0].icon;
-    console.log(futureIcon);
     var futureWeatherIcon = $("<img>").attr(
       "src",
       "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
@@ -157,5 +155,4 @@ function futureWeather(cityInput) {
   });
 }
 
-//upon refresh, any cities in localStorage persist/append to unordered list (id: past-cities), need to create <li class="list-group-item"> for each
 //upon refresh, last searched city's forecast-today and forecast-future persists
