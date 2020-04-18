@@ -120,53 +120,42 @@ function findWeather(cityInput) {
 }
 
 //function to get future weather info
-// function futureWeather(cityInput) {
-//   var queryUrl =
-//     "https://api.openweathermap.org/data/2.5/weather?q=" +
-//     cityInput +
-//     "&appid=" +
-//     apiKey;
-//   $.ajax({
-//     url: queryUrl,
-//     method: "GET",
-//   }).then(function (response) {
-//     var queryUrl2 =
-//       "https://api.openweathermap.org/data/2.5/onecall?lat=" +
-//       response.coord.lat +
-//       "&lon=" +
-//       response.coord.lon +
-//       "&appid=" +
-//       apiKey +
-//       "&units=imperial";
-//     $.ajax({
-//       url: queryUrl2,
-//       method: "GET",
-//     }).then(function (response) {
-//       console.log(moment(response.daily[0].dt));
-//       var futureDate = $(
-//         "<h5>" + moment().add(1, "d").format("M/D/YYYY") + "</h5>"
-//       );
-//       var futureTemp = $(
-//         "<div>" + "Temp: " + response.daily[0].temp.max + " &deg;F" + "</div>"
-//       );
-//       var futureHumidity = $(
-//         "<div>" + "Humidity: " + response.daily[0].humidity + "%" + "</div>"
-//       );
-//       var futureIcon = response.daily[0].weather[0].icon;
-//       console.log(futureIcon);
-//       var futureWeatherIcon = $("<img>").attr(
-//         "src",
-//         "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
-//       );
-//       var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
-//       var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
-//       $(futureDate).addClass("card-title").appendTo(newCardBody);
-//       $(futureWeatherIcon).appendTo(newCardBody);
-//       $(futureTemp).addClass("card-text").appendTo(newCardBody);
-//       $(futureHumidity).addClass("card-text").appendTo(newCardBody);
-//     });
-//   });
-// }
+
+function futureWeather(cityInput) {
+  var queryUrl =
+    "https://api.openweathermap.org/data/2.5/forecast?q=" +
+    cityInput +
+    "&appid=" +
+    apiKey +
+    "&units=imperial";
+  $.ajax({
+    url: queryUrl,
+    method: "GET",
+  }).then(function (response) {
+    console.log(response);
+    var futureDate = $(
+      "<h5>" + moment().add(1, "d").format("M/D/YYYY") + "</h5>"
+    );
+    var futureTemp = $(
+      "<div>" + "Temp: " + response.list[0].main.temp + " &deg;F" + "</div>"
+    );
+    var futureHumidity = $(
+      "<div>" + "Humidity: " + response.list[0].main.humidity + "%" + "</div>"
+    );
+    var futureIcon = response.list[0].weather[0].icon;
+    console.log(futureIcon);
+    var futureWeatherIcon = $("<img>").attr(
+      "src",
+      "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
+    );
+    var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
+    var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
+    $(futureDate).addClass("card-title").appendTo(newCardBody);
+    $(futureWeatherIcon).appendTo(newCardBody);
+    $(futureTemp).addClass("card-text").appendTo(newCardBody);
+    $(futureHumidity).addClass("card-text").appendTo(newCardBody);
+  });
+}
 
 //upon refresh, any cities in localStorage persist/append to unordered list (id: past-cities), need to create <li class="list-group-item"> for each
 //upon refresh, last searched city's forecast-today and forecast-future persists
