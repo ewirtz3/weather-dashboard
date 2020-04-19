@@ -20,6 +20,7 @@ $(searchBtn).on("click", function (event) {
   findWeather(cityInput);
   futureWeather(cityInput);
   renderCity();
+  $("#search-city").val("");
 });
 
 //function to set cityInput to localStorage, adding it to the cities array
@@ -92,19 +93,10 @@ function findWeather(cityInput) {
           "</span>" +
           "</div>"
       );
-      if (response2.current.uvi < 4) {
-        $("span").addClass("badge badge-success");
-      }
-      if (response2.current.uvi >= 4 && response2.current.uvi < 7) {
-        $("span").addClass("badge badge-warning");
-      }
-      if (response2.current.uvi > 7) {
-        $("span").addClass("badge badge-danger");
-      }
       var currentIcon = response2.current.weather[0].icon;
       var weatherIcon = $("<img>").attr(
         "src",
-        "http://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
+        "https://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
       );
       $("#forecast-today").removeClass("d-none");
       $(currentDate).addClass("card-title").appendTo("#current-weather-card");
@@ -115,6 +107,15 @@ function findWeather(cityInput) {
         .appendTo("#current-weather-card");
       $(currentWind).addClass("card-text").appendTo("#current-weather-card");
       $(currentUvi).addClass("card-text").appendTo("#current-weather-card");
+      if (response2.current.uvi < 4) {
+        $("span").addClass("badge badge-success");
+      }
+      if (response2.current.uvi >= 4 && response2.current.uvi < 7) {
+        $("span").addClass("badge badge-warning");
+      }
+      if (response2.current.uvi > 7) {
+        $("span").addClass("badge badge-danger");
+      }
     });
   });
 }
@@ -132,27 +133,42 @@ function futureWeather(cityInput) {
     url: queryUrl,
     method: "GET",
   }).then(function (response) {
-    var futureDate = $(
-      "<h5>" + moment().add(1, "d").format("M/D/YYYY") + "</h5>"
-    );
-    var futureTemp = $(
-      "<div>" + "Temp: " + response.list[0].main.temp + " &deg;F" + "</div>"
-    );
-    var futureHumidity = $(
-      "<div>" + "Humidity: " + response.list[0].main.humidity + "%" + "</div>"
-    );
-    var futureIcon = response.list[0].weather[0].icon;
-    var futureWeatherIcon = $("<img>").attr(
-      "src",
-      "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
-    );
-    var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
-    var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
-    $(futureDate).addClass("card-title").appendTo(newCardBody);
-    $(futureWeatherIcon).appendTo(newCardBody);
-    $(futureTemp).addClass("card-text").appendTo(newCardBody);
-    $(futureHumidity).addClass("card-text").appendTo(newCardBody);
+    for (i = 7; i < response.list.length; i += 8) {
+      var futureDate = $(
+        "<h5>" + moment.unix(response.list[i].dt).format("M/D/YYYY") + "</h5>"
+      );
+      var futureTemp = $(
+        "<div>" + "Temp: " + response.list[i].main.temp + " &deg;F" + "</div>"
+      );
+      var futureHumidity = $(
+        "<div>" + "Humidity: " + response.list[i].main.humidity + "%" + "</div>"
+      );
+      var futureIcon = response.list[i].weather[0].icon;
+      var futureWeatherIcon = $("<img>").attr(
+        "src",
+        "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
+      );
+      var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
+      var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
+      $(futureDate).addClass("card-title").appendTo(newCardBody);
+      $(futureWeatherIcon).appendTo(newCardBody);
+      $(futureTemp).addClass("card-text").appendTo(newCardBody);
+      $(futureHumidity).addClass("card-text").appendTo(newCardBody);
+    }
   });
 }
 
+//onclick function so that when user clicks a past-searched city, that current and future forecasts appear
+$(document).on("click", ".list-group-item", function (event) {
+  $("#current-weather-card").empty();
+  $("#forecast-future").empty();
+  findWeather(event.target.innerHTML);
+  futureWeather(event.target.innerHTML);
+});
+
 //upon refresh, last searched city's forecast-today and forecast-future persists
+$(document).ready(function () {
+  console.log(cities[cities.length - 1]);
+  //   findWeather(cities[cities.length - 1]);
+  //   futureWeather(cities[cities.length - 1]);
+});
