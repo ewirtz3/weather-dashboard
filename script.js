@@ -168,7 +168,8 @@ $(document).on("click", ".list-group-item", function (event) {
 
 //upon refresh, last searched city's forecast-today and forecast-future persists
 $(document).ready(function () {
-  console.log(cities[cities.length - 1]);
-  //   findWeather(cities[cities.length - 1]);
-  //   futureWeather(cities[cities.length - 1]);
+  var cities = JSON.parse(localStorage.getItem("cities"));
+  var lastCity = cities[cities.length - 1];
+  findWeather(lastCity);
+  futureWeather(lastCity);
 });
