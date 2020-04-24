@@ -53,71 +53,69 @@ function findWeather(cityInput) {
     url: queryUrl,
     method: "GET",
   }).then(function (response) {
-    var queryUrl2 =
-      "https://api.openweathermap.org/data/2.5/onecall?lat=" +
-      response.coord.lat +
-      "&lon=" +
-      response.coord.lon +
-      "&appid=" +
-      apiKey +
-      "&units=imperial";
-    $.ajax({
-      url: queryUrl2,
-      method: "GET",
-    }).then(function (response2) {
-      var currentDate = $(
-        "<h2>" + cityInput + " (" + moment().format("M/D/YYYY") + ")" + "<h2>"
-      );
-      var currentTemp = $(
-        "<div>" +
-          "Temperature: " +
-          response2.current.temp +
-          " &deg;F" +
-          "</div>"
-      );
-      var currentHumidity = $(
-        "<div>" + "Humidity: " + response2.current.humidity + "%" + "</div>"
-      );
-      var currentWind = $(
-        "<div>" +
-          "Wind Speed: " +
-          response2.current.wind_speed +
-          " mph" +
-          "</div>"
-      );
-      var currentUvi = $(
-        "<div>" +
-          "UV Index: " +
-          "<span>" +
-          response2.current.uvi +
-          "</span>" +
-          "</div>"
-      );
-      var currentIcon = response2.current.weather[0].icon;
-      var weatherIcon = $("<img>").attr(
-        "src",
-        "https://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
-      );
-      $("#forecast-today").removeClass("d-none");
-      $(currentDate).addClass("card-title").appendTo("#current-weather-card");
-      $(weatherIcon).appendTo("#current-weather-card");
-      $(currentTemp).addClass("card-text").appendTo("#current-weather-card");
-      $(currentHumidity)
-        .addClass("card-text")
-        .appendTo("#current-weather-card");
-      $(currentWind).addClass("card-text").appendTo("#current-weather-card");
-      $(currentUvi).addClass("card-text").appendTo("#current-weather-card");
-      if (response2.current.uvi < 4) {
-        $("span").addClass("badge badge-success");
-      }
-      if (response2.current.uvi >= 4 && response2.current.uvi < 7) {
-        $("span").addClass("badge badge-warning");
-      }
-      if (response2.current.uvi > 7) {
-        $("span").addClass("badge badge-danger");
-      }
-    });
+    continueFindingWeather(response);
   });
+}
+
+function continueFindingWeather(response) {
+  var queryUrl2 =
+    "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+    response.coord.lat +
+    "&lon=" +
+    response.coord.lon +
+    "&appid=" +
+    apiKey +
+    "&units=imperial";
+  $.ajax({
+    url: queryUrl2,
+    method: "GET",
+  }).then(function (response2) {
+    renderWeather(response2, response.name);
+  });
+}
+
+function renderWeather(response2, cityInput) {
+  var currentDate = $(
+    "<h2>" + cityInput + " (" + moment().format("M/D/YYYY") + ")" + "<h2>"
+  );
+  var currentTemp = $(
+    "<div>" + "Temperature: " + response2.current.temp + " &deg;F" + "</div>"
+  );
+  var currentHumidity = $(
+    "<div>" + "Humidity: " + response2.current.humidity + "%" + "</div>"
+  );
+  var currentWind = $(
+    "<div>" + "Wind Speed: " + response2.current.wind_speed + " mph" + "</div>"
+  );
+  var currentUvi = $(
+    "<div>" +
+      "UV Index: " +
+      "<span>" +
+      response2.current.uvi +
+      "</span>" +
+      "</div>"
+  );
+  var currentIcon = response2.current.weather[0].icon;
+  var weatherIcon = $("<img>").attr(
+    "src",
+    "https://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
+  );
+  $("#forecast-today").removeClass("d-none");
+  $(currentDate).addClass("card-title").appendTo("#current-weather-card");
+  $(weatherIcon).appendTo("#current-weather-card");
+  $(currentTemp).addClass("card-text").appendTo("#current-weather-card");
+  $(currentHumidity).addClass("card-text").appendTo("#current-weather-card");
+  $(currentWind).addClass("card-text").appendTo("#current-weather-card");
+  $(currentUvi).addClass("card-text").appendTo("#current-weather-card");
+  if (response2.current.uvi < 4) {
+    $("span").addClass("badge badge-success");
+  }
+  if (response2.current.uvi >= 4 && response2.current.uvi < 7) {
+    $("span").addClass("badge badge-warning");
+  }
+  if (response2.current.uvi > 7) {
+    $("span").addClass("badge badge-danger");
+  }
 }
 
 //function to get future weather info
