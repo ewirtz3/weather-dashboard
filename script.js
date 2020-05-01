@@ -144,7 +144,7 @@ function futureWeather(cityInput) {
       var futureIcon = response.list[i].weather[0].icon;
       var futureWeatherIcon = $("<img>").attr(
         "src",
-        "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
+        "https://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
       );
       var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
       var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
