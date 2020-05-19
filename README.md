@@ -1,4 +1,4 @@
-# API Weather Dashboard Homework
+# API Weather Dashboard
 
 **Objective: Create a dynamic weather dashboard that takes in the user's input, utilizes moment.js, local storage, and the Open Weather API to accomplish the following requirements:**
 
