@@ -1,12 +1,29 @@
-# API Weather Dashboard Homework
+# Weather Dashboard
 
-**Objective: Create a dynamic weather dashboard that takes in the user's input, utilizes moment.js, local storage, and the Open Weather API to accomplish the following requirements:**
+## Description
 
-1. User inputs the city, upon click of the search button, the site displays the current weather and 5-day forecast for that city, utilizing AJAX calls to the Open Weather API.
-2. When a new city is searched, it is added to the list of past cities searched. These are stored into localStorage and persist upon refresh.
-3. If the user clicks on one of the past cities searched, that city's weather and 5-day forecast will be re-rendered.
-4. All forecasts will display the corresponding weather icon.
-5. The current forecast will display the UV index, with a box around it whose color corresponds to whether the UV index is low (green), moderate (yellow), or high (red).
-6. Upon refresh, the current and 5-day forecast of the last city searched will persist.
+This project is a Weather Dashboard. It utilizes moment.js, Local Storage, and AJAX calls to the Open Weather API to provide the user with current and 5-day forecasts for a particular city. User inputs the city they want to see the weather for, the forecast appears and the city is listed on the past cities searched. Weather forecasts display accurate weather icon and badge color according to the UV index. Current city forecast and list of past cities searched persist upon refresh, as they are stored in Local Storage.
 
 **Link to weather dashboard:** https://ewirtz3.github.io/weather-dashboard/
+
+<img src="https://img.shields.io/github/last-commit/ewirtz3/weather-dashboard?style=for-the-badge"/>
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+
+## Installation
+
+There are no steps for installation.
+
+## Usage
+
+Click the link above, and enter the city you want to search to receive your weather forecast!
+
+## License
+
+MIT License Copyright(c) 2020 Emily Wirtz
+
+If you have any questions, please contact me at GitHub username <a href="https://github.com/ewirtz3">ewirtz3</a>
