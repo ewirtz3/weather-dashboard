@@ -45,7 +45,7 @@ var apiKey = "f89051132db4ab1cb9f39239dc668ba0";
 //function to get current weather info
 function findWeather(cityInput) {
   var queryUrl =
-    "http://api.openweathermap.org/data/2.5/weather?q=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
     cityInput +
     "&APPID=" +
     apiKey;
@@ -60,7 +60,7 @@ function findWeather(cityInput) {
 
 function continueFindingWeather(response) {
   var queryUrl2 =
-    "http://api.openweathermap.org/data/2.5/onecall?lat=" +
+    "https://api.openweathermap.org/data/2.5/onecall?lat=" +
     response.coord.lat +
     "&lon=" +
     response.coord.lon +
@@ -99,7 +99,7 @@ function renderWeather(response2, cityInput) {
   var currentIcon = response2.current.weather[0].icon;
   var weatherIcon = $("<img>").attr(
     "src",
-    "http://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
+    "https://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
   );
   $("#forecast-today").removeClass("d-none");
   $(currentDate).addClass("card-title").appendTo("#current-weather-card");
@@ -123,12 +123,11 @@ function renderWeather(response2, cityInput) {
 
 function futureWeather(cityInput) {
   var queryUrl =
-    "http://api.openweathermap.org/data/2.5/forecast?q=" +
+    "https://api.openweathermap.org/data/2.5/forecast?q=" +
     cityInput +
     "&APPID=" +
     apiKey +
     "&units=imperial";
-  console.log("future weather url", queryUrl);
   $.ajax({
     url: queryUrl,
     method: "GET",
@@ -146,7 +145,7 @@ function futureWeather(cityInput) {
       var futureIcon = response.list[i].weather[0].icon;
       var futureWeatherIcon = $("<img>").attr(
         "src",
-        "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
+        "https://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
       );
       var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
       var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
@@ -162,7 +161,6 @@ function futureWeather(cityInput) {
 $(document).on("click", ".list-group-item", function (event) {
   $("#current-weather-card").empty();
   $("#forecast-future").empty();
-  console.log(event);
   findWeather(event.target.innerHTML);
   futureWeather(event.target.innerHTML);
 });
@@ -171,7 +169,6 @@ $(document).on("click", ".list-group-item", function (event) {
 $(document).ready(function () {
   var cities = JSON.parse(localStorage.getItem("cities"));
   var lastCity = cities[cities.length - 1];
-  var formattedCity1 = lastCity.replace(/\s/g, "");
-  findWeather(formattedCity1);
-  futureWeather(formattedCity1);
+  findWeather(lastCity);
+  futureWeather(lastCity);
 });

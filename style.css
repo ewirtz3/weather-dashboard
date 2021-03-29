@@ -12,5 +12,11 @@ main {
 }
 
 #city-search {
-  margin-left: 15px;
+  margin: 15px;
+}
+
+@media screen and (max-width: 750px) {
+  #current-city {
+    margin-left: 15px;
+  }
 }
