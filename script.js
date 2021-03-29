@@ -7,7 +7,7 @@ $(document).ready(renderCity());
 
 //user searches for a city, upon click of spyglass use AJAX to query that city from weather API, city saves in localStorage, findWeather function runs
 //upon refresh, any cities in localStorage persist/append to unordered list (id: past-cities), need to create <li class="list-group-item"> for each
-$(searchBtn).on("click", function (event) {
+$(searchBtn).on("click", (event) => {
   event.preventDefault();
   $("#current-weather-card").empty();
   $("#forecast-future").empty();
@@ -15,7 +15,6 @@ $(searchBtn).on("click", function (event) {
   if (cityInput === "") {
     return;
   }
-  cities.push(cityInput);
   storeCity(cityInput);
   findWeather(cityInput);
   futureWeather(cityInput);
@@ -25,7 +24,8 @@ $(searchBtn).on("click", function (event) {
 
 //function to set cityInput to localStorage, adding it to the cities array
 function storeCity(cityInput) {
-  localStorage.setItem("cities", JSON.stringify(cities));
+  cities.push(cityInput);
+  localStorage.setItem("cities", JSON.stringify([...cities]));
 }
 
 //function to render past cities searched
@@ -45,25 +45,26 @@ var apiKey = "f89051132db4ab1cb9f39239dc668ba0";
 //function to get current weather info
 function findWeather(cityInput) {
   var queryUrl =
-    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    "http://api.openweathermap.org/data/2.5/weather?q=" +
     cityInput +
-    "&appid=" +
+    "&APPID=" +
     apiKey;
   $.ajax({
     url: queryUrl,
     method: "GET",
   }).then(function (response) {
+    console.log(response);
     continueFindingWeather(response);
   });
 }
 
 function continueFindingWeather(response) {
   var queryUrl2 =
-    "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+    "http://api.openweathermap.org/data/2.5/onecall?lat=" +
     response.coord.lat +
     "&lon=" +
     response.coord.lon +
-    "&appid=" +
+    "&APPID=" +
     apiKey +
     "&units=imperial";
   $.ajax({
@@ -98,7 +99,7 @@ function renderWeather(response2, cityInput) {
   var currentIcon = response2.current.weather[0].icon;
   var weatherIcon = $("<img>").attr(
     "src",
-    "https://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
+    "http://openweathermap.org/img/wn/" + currentIcon + "@2x.png"
   );
   $("#forecast-today").removeClass("d-none");
   $(currentDate).addClass("card-title").appendTo("#current-weather-card");
@@ -122,11 +123,12 @@ function renderWeather(response2, cityInput) {
 
 function futureWeather(cityInput) {
   var queryUrl =
-    "https://api.openweathermap.org/data/2.5/forecast?q=" +
+    "http://api.openweathermap.org/data/2.5/forecast?q=" +
     cityInput +
-    "&appid=" +
+    "&APPID=" +
     apiKey +
     "&units=imperial";
+  console.log("future weather url", queryUrl);
   $.ajax({
     url: queryUrl,
     method: "GET",
@@ -144,7 +146,7 @@ function futureWeather(cityInput) {
       var futureIcon = response.list[i].weather[0].icon;
       var futureWeatherIcon = $("<img>").attr(
         "src",
-        "https://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
+        "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png"
       );
       var newCard = $("<div>").addClass("card").appendTo("#forecast-future");
       var newCardBody = $("<div>").addClass("card-body").appendTo(newCard);
@@ -160,6 +162,7 @@ function futureWeather(cityInput) {
 $(document).on("click", ".list-group-item", function (event) {
   $("#current-weather-card").empty();
   $("#forecast-future").empty();
+  console.log(event);
   findWeather(event.target.innerHTML);
   futureWeather(event.target.innerHTML);
 });
@@ -168,6 +171,7 @@ $(document).on("click", ".list-group-item", function (event) {
 $(document).ready(function () {
   var cities = JSON.parse(localStorage.getItem("cities"));
   var lastCity = cities[cities.length - 1];
-  findWeather(lastCity);
-  futureWeather(lastCity);
+  var formattedCity1 = lastCity.replace(/\s/g, "");
+  findWeather(formattedCity1);
+  futureWeather(formattedCity1);
 });
